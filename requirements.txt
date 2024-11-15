@@ -1,0 +1,8 @@
+PyQt5==5.15.7
+Pillow==8.0.0
+numpy==1.24.2
+traci==1.10.0
+math
+datetime
+pathlib
+time

@@ -1,0 +1,958 @@
+#VRML_SIM R2022b utf8
+# license: Copyright Cyberbotics Ltd. Licensed for use only with Webots.
+# license url: https://cyberbotics.com/webots_assets_license
+# documentation url: https://www.cyberbotics.com/doc/automobile/car
+# Model of an BMW X5 car using the Car proto as a base.
+# The vehicle is modelled with realistic physics properties: motor torques, body mass, friction forces, suspensions, etc.
+# This model was sponsored by the CTI project RO2IVSim (http://transport.epfl.ch/simulator-for-mobile-robots-and-intelligent-vehicles).
+# For the last 6 fields to have any effect, the 'interior' has to be enabled.
+# template language: javascript
+
+#新版，带有HUD和各种传感器
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/abstract/CarSteeringWheel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/abstract/Car.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5Wheel.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/abstract/VehicleLights.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5FrontLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5RightIndicator.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5LeftIndicator.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5AntiFogLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5RearLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5BrakingLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5BackwardsLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5RightWiper.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5LeftWiper.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5Mesh.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5InnerWindow.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5RightWingMirror.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5LeftWingMirror.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5Interior.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5CentralMirrorFrame.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5CentralMirror.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/BmwX5RearInterior.proto"
+
+PROTO BmwX5 [
+  field SFVec3f      translation              0 0 0.4
+  field SFRotation   rotation                 0 0 1 0
+  field SFColor      color                    0.43 0.11 0.1
+ # field SFString     engineSound              "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/sounds/engine.wav"
+  field SFString     name                     "vehicle"
+  field SFString     controller               "<generic>"
+  field MFString     controllerArgs           []
+  field SFBool       supervisor               FALSE
+  field SFBool       synchronization          TRUE
+  field SFBool       windshieldWipers         TRUE
+  field SFBool       frontSpotLights          FALSE
+  field SFBool       rearMirror               FALSE
+  field SFBool       leftWingMirror           FALSE
+  field SFBool       rightWingMirror          FALSE
+  field SFFloat      mirrorFar                200.0
+  field MFNode       sensorsSlotFront         []
+  field MFNode       sensorsSlotRear          []
+  field MFNode       sensorsSlotTop           []
+  field MFNode       sensorsSlotCenter        []
+  field SFBool       interior                 TRUE
+  field SFBool       dynamicSpeedDisplay      TRUE
+  field SFBool       indicatorLevers          TRUE
+  field SFNode       steeringWheel            CarSteeringWheel {}
+  field SFBool       completeInterior         TRUE
+  field SFBool       shifter                  TRUE
+  field SFFloat      outerWindowTransparency  0.4
+  field SFFloat      innerWindowTransparency  0.7
+  field SFBool       innerWindowDust          FALSE
+  field SFString     window                   "<generic>"
+]
+{
+  %<
+    let interior = fields.interior.value;
+    let outerWindowTransparency = fields.outerWindowTransparency.value;
+    let innerWindowTransparency = fields.innerWindowTransparency.value;
+    const frontSpotLights = fields.frontSpotLights.value;
+    const rearMirror = fields.rearMirror.value;
+    const dynamicSpeedDisplay = fields.dynamicSpeedDisplay.value;
+    const completeInterior = fields.completeInterior.value;
+    const innerWindowDust = fields.innerWindowDust.value;
+    if (!interior && rearMirror)
+      console.error('The rear mirror can only enabled if \'interior\' is set to TRUE.');
+
+    if (!interior && (outerWindowTransparency !== fields.outerWindowTransparency.defaultValue || innerWindowTransparency !== fields.innerWindowTransparency.defaultValue)) {
+      outerWindowTransparency = fields.outerWindowTransparency.defaultValue;
+      innerWindowTransparency = fields.innerWindowTransparency.defaultValue;
+      console.error('Window transparencies were reset to default values.');
+    }
+    if (!interior && (dynamicSpeedDisplay || completeInterior || innerWindowDust))
+      console.error('In order to see the effect of the last 6 fields, the \'interior\' has to be enabled.');
+  >%
+  Car {
+    translation IS translation
+    rotation IS rotation
+    engineSound IS engineSound
+    trackFront 1.628
+    trackRear 1.628
+    wheelbase 2.995
+    time0To100 7
+    engineMinRPM 1000
+    engineMaxRPM 6500
+    brakeCoefficient 1800  # calibrated for braking from 100 to 0km/h in 36.5m
+    engineFunctionCoefficients 34.11 0.136 -0.00001461
+    wheelsDampingConstant 2
+    gearRatio   [-12.5 12.5 8 5.35 4.3 4]
+    wheelFrontLeft BmwX5Wheel {
+      name "front left wheel"
+      wheelSide TRUE
+      physics DEF WHEEL_PHYSICS Physics {
+        density -1
+        mass 30
+      }
+    }
+    wheelFrontRight BmwX5Wheel {
+      name "front right wheel"
+      physics USE WHEEL_PHYSICS
+    }
+    wheelRearRight BmwX5Wheel {
+      name "rear right wheel"
+      physics USE WHEEL_PHYSICS
+    }
+    wheelRearLeft BmwX5Wheel {
+      name "rear left wheel"
+      wheelSide TRUE
+      physics USE WHEEL_PHYSICS
+    }
+    extensionSlot [
+      # Sensors slots
+      Transform {
+        translation -1 0 0.3
+        rotation 0 0 1 3.14159
+     #   children IS sensorsSlotRear
+      children[
+            DEF REAR DistanceSensor {
+      translation 0 0 0.3
+      name "distance sensor rear"
+      lookupTable [
+        0 0 0
+        10 10 0
+      ]
+      numberOfRays 2
+      aperture 0.2
+    }
+    DEF REAR_LEFT DistanceSensor {
+      translation -0.188938 0.705126 0.3
+      rotation 0 0 1 0.523599
+      name "distance sensor rear left"
+      lookupTable [
+        0 0 0
+        10 10 0
+      ]
+      numberOfRays 2
+      aperture 0.2
+    }
+    DEF REAR_RIGHT DistanceSensor {
+      translation -0.188938 -0.705126 0.3
+      rotation 0 0 -1 0.5235988268
+      name "distance sensor rear right"
+      lookupTable [
+        0 0 0
+        10 10 0
+      ]
+      numberOfRays 2
+      aperture 0.2
+    }
+        
+        ]
+     
+      }
+      Transform {
+        translation 3.85 0 0.45
+    #    children IS sensorsSlotFront
+              children[
+        
+          DEF FRONT DistanceSensor {
+      translation -0.14 0 0.3
+      name "distance sensor front"
+      lookupTable [
+        0 0 0
+        20 20 0
+      ]
+      numberOfRays 2
+      aperture 0.1
+    }
+    DEF FRONT_RIGHT_0 DistanceSensor {
+      translation -0.292861 0.645126 0.3
+      rotation 0 0 1 0.130899
+      name "distance sensor front right 0"
+      lookupTable [
+        0 0 0
+        20 20 0
+      ]
+      numberOfRays 2
+      aperture 0.1
+    }
+    DEF FRONT_RIGHT_1 DistanceSensor {
+      translation -0.292861 0.645126 0.3
+      rotation 0 0 1 0.261799
+      name "distance sensor front right 1"
+      lookupTable [
+        0 0 0
+        15 15 0
+      ]
+      numberOfRays 2
+      aperture 0.1
+    }
+    DEF FRONT_RIGHT_2 DistanceSensor {
+      translation -0.292861 0.645126 0.3
+      rotation 0 0 1 0.392699
+      name "distance sensor front right 2"
+      lookupTable [
+        0 0 0
+        10 10 0
+      ]
+      numberOfRays 2
+      aperture 0.1
+    }
+    DEF FRONT_LEFT_0 DistanceSensor {
+      translation -0.284201 -0.650126 0.3
+      rotation 0 0 -1 0.130901
+      name "distance sensor front left 0"
+      lookupTable [
+        0 0 0
+        20 20 0
+      ]
+      numberOfRays 2
+      aperture 0.1
+    }
+    DEF FRONT_LEFT_1 DistanceSensor {
+      translation -0.284201 -0.650126 0.3
+      rotation 0 0 -1 0.2618007196
+      name "distance sensor front left 1"
+      lookupTable [
+        0 0 0
+        15 15 0
+      ]
+      numberOfRays 2
+      aperture 0.1
+    }
+    DEF FRONT_LEFT_2 DistanceSensor {
+      translation -0.284201 -0.650126 0.3
+      rotation 0 0 -1 0.3927007196
+      name "distance sensor front left 2"
+      lookupTable [
+        0 0 0
+        10 10 0
+      ]
+      numberOfRays 2
+      aperture 0.1
+    } 
+        
+        
+        
+        ]
+        
+      }
+      Transform {
+        translation 1 0 1.45
+        children IS sensorsSlotTop
+      }
+      Transform {
+  #      children IS sensorsSlotCenter
+             children[
+         DEF RIGHT DistanceSensor {
+      translation 1.32 -0.9 0.3
+      rotation 0 0 1 -1.5708
+      name "distance sensor right"
+      lookupTable [
+        0 0 0
+        4 4 0
+      ]
+      numberOfRays 2
+      aperture 0.9
+    }
+    DEF LEFT DistanceSensor {
+      translation 1.32 0.9 0.3
+      rotation 0 0 1 1.5708
+      name "distance sensor left"
+      lookupTable [
+        0 0 0
+        4 4 0
+      ]
+      numberOfRays 2
+      aperture 0.9
+    }
+        
+            GPS {
+      translation 5.03 0 0
+      rotation 0 0 1 3.14159
+    }
+        
+        ]
+        
+        
+        
+      }
+      
+
+      # lights
+      VehicleLights {
+        front [
+          Group {
+            children [
+              %< if (frontSpotLights) { >%
+                SpotLight {
+                  attenuation 0 0 1
+                  intensity 20
+                  beamWidth 0.7
+                  cutOffAngle 0.8
+                  direction 1 -0.2 -1
+                  location 3.95 0.65 0.45
+                  radius 20
+                  castShadows TRUE
+                }
+                SpotLight {
+                  attenuation 0 0 1
+                  intensity 20
+                  beamWidth 0.7
+                  cutOffAngle 0.8
+                  direction 1 0.2 -1
+                  location 3.95 -0.65 0.45
+                  radius 20
+                  castShadows TRUE
+                }
+              %< } >%
+              Transform{
+                rotation 0.57735 0.57735 0.57735 2.094395
+                children [
+                  BmwX5FrontLight {
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+        rightIndicator [
+          Transform{
+            rotation 0.57735 0.57735 0.57735 2.094395
+            children [
+              BmwX5RightIndicator {
+              }
+            ]
+          }
+        ]
+        leftIndicator [
+          Transform{
+            rotation 0.57735 0.57735 0.57735 2.094395
+            children [
+              BmwX5LeftIndicator {
+              }
+            ]
+          }
+        ]
+        antifog [
+          Transform{
+            rotation 0.57735 0.57735 0.57735 2.094395
+            children [
+              BmwX5AntiFogLight {
+              }
+            ]
+          }
+        ]
+        rear [
+          Transform{
+            rotation 0.57735 0.57735 0.57735 2.094395
+            children [
+              BmwX5RearLight {
+              }
+            ]
+          }
+        ]
+        braking [
+          Transform{
+            rotation 0.57735 0.57735 0.57735 2.094395
+            children [
+              BmwX5BrakingLight {
+              }
+            ]
+          }
+        ]
+        backwards [
+          Transform{
+            rotation 0.57735 0.57735 0.57735 2.094395
+            children [
+              BmwX5BackwardsLight {
+              }
+            ]
+          }
+        ]
+      }
+      %< if (interior) { >%
+          DEF INTERIOR_RIGHT_INDICATOR LED {
+            children [
+              Shape {
+                appearance DEF INDICATOR_APPEARANCE PBRAppearance {
+                  metalness 0
+                  roughness 0.3
+                  baseColor 0.255686 0.530196 0.353725
+                }
+                geometry IndexedFaceSet {
+                  coord Coordinate {
+                    point [
+                      2.176469 0.414489 0.730049 2.176469 0.410942 0.730049 2.173784 0.414489 0.727043 2.173784 0.410942 0.727043 2.171399 0.410942 0.724502 2.178832 0.410942 0.732554 2.175115 0.406213 0.728528
+                    ]
+                  }
+                  coordIndex [
+                    1, 3, 6, -1, 5, 1, 6, -1, 1, 2
+                    3, -1, 3, 4, 6, -1, 1, 0, 2, -1
+                  ]
+                }
+              }
+            ]
+            name "interior_right_indicators"
+            color 0 0.596078 0
+          }
+          DEF INTERIOR_LEFT_INDICATOR LED {
+            children [
+              Shape {
+                appearance USE INDICATOR_APPEARANCE
+                geometry IndexedFaceSet {
+                  coord Coordinate {
+                    point [
+                      2.173784 0.415657 0.727043 2.173784 0.419204 0.727043 2.176469 0.415657 0.730048 2.176469 0.419204 0.730048 2.178832 0.419204 0.732553 2.171399 0.419204 0.724502 2.175115 0.423934 0.728528
+                    ]
+                  }
+                  coordIndex [
+                    1, 2, 3, -1, 1, 3, 6, -1, 5, 1
+                    6, -1, 3, 4, 6, -1, 1, 0, 2, -1
+                  ]
+                }
+              }
+            ]
+            name "interior_left_indicators"
+            color 0 0.596078 0
+          }
+      %< } >%
+      # windshield wipers
+      %< if (fields.windshieldWipers.value) { >%
+      DEF RIGHT_WIPER HingeJoint {
+        jointParameters HingeJointParameters {
+          axis -1.7 0.04 -2.19
+          anchor 2.55 0.05 0.79
+        }
+        device [
+          DEF RIGHT_WIPER_MOTOR RotationalMotor {
+            name "right_wiper_motor"
+            maxPosition 1.6
+            minPosition 0
+            sound ""
+          }
+          DEF WIPER_SENSOR PositionSensor {
+            name "wiper_sensor"
+          }
+        ]
+        endPoint Solid {
+          children [
+            Transform{
+              rotation 0.57735 0.57735 0.57735 2.094395
+              children [
+                BmwX5RightWiper{
+                  %< if (outerWindowTransparency !== 0) { >%
+                  castShadows TRUE
+                %< } >%
+                }
+              ]
+            }
+          ]
+          name "right wiper"
+        }
+      }
+      DEF LEFT_WIPER HingeJoint {
+        jointParameters HingeJointParameters {
+          axis -1.25 -0.08 -1.85
+          anchor 2.46 0.63 0.84
+        }
+        device [
+          DEF LEFT_WIPER_MOTOR RotationalMotor {
+            name "left_wiper_motor"
+            maxPosition 1.6
+            minPosition 0
+            sound ""
+          }
+        ]
+        endPoint Solid {
+          children [
+            Transform{
+              rotation 0.57735 0.57735 0.57735 2.094395
+              children [
+                BmwX5LeftWiper{
+                  %< if (outerWindowTransparency !== 0) { >%
+                    castShadows TRUE
+                  %< } >%
+                }
+              ]
+            }
+          ]
+          name "left wiper"
+        }
+      }
+      %< } >%
+      Transform{
+          rotation 0.57735 0.57735 0.57735 2.094395
+          children [
+            BmwX5Mesh {
+              color IS color
+              outerWindowTransparency %<= outerWindowTransparency >%
+            }
+          ]
+      }
+      %< if (innerWindowTransparency !== 1) { >%
+        Transform{
+           rotation 0.57735 0.57735 0.57735 2.094395
+           children [
+             BmwX5InnerWindow {
+               innerWindowTransparency %<= innerWindowTransparency >%
+               innerWindowDust IS innerWindowDust
+             }
+          ]
+        }       
+      %< } >%
+      
+DEF HUD_DISPLAY Display {
+
+            width 512
+            height 512
+name "HUD_DISPLAY"
+children[
+
+
+Transform{                  
+ rotation 0.57735 0.57735 0.57735 2.094395
+  scale 1 1 1
+  translation -0.01 0 0
+  
+  
+  children [
+    Shape {
+      appearance PBRAppearance {
+       baseColorMap ImageTexture {
+       # url ["hud_image.png"]
+    }
+        baseColor 0.372549 0.556863 0.552941
+        metalness 0
+        roughness 0.01
+        #opacity 0
+        transparency 0.5
+      }
+
+      geometry IndexedFaceSet {
+        creaseAngle .5
+        solid FALSE
+        coord Coordinate {
+          point [
+            -0.448647 0.8585 2.50274, -0.78242 0.893786 2.3133, -0.763217 0.868136 2.36739, -0.725155 0.862238 2.4035, 
+            -0.648503 0.860682 2.44455, 0.769542 0.878119 2.34573, 0.780523 0.893787 2.3133, 0.754907 0.870179 2.37143, 
+            0.664517 0.861456 2.43597, 0.643161 0.860624 2.4461, 0.726629 0.86467 2.40191, 0.722773 0.864267 2.40477, 
+            0.754247 1.02964 2.13807, 0.779241 0.92757 2.26762, 0.553941 1.19155 1.96178, 0.597159 1.04338 2.18605, 
+            0.327794 1.31211 1.78076, 0.200781 1.20982 1.99455, 0.414284 1.04831 2.22158, 0.430762 0.949664 2.36933, 
+            0.237836 0.858135 2.52803, 0.448643 0.858485 2.50268, 0.649479 1.29487 1.73021, 0.66892 1.2611 1.79732, 
+            0.715947 1.15063 1.97358, 0.375959 1.20602 1.97744, 0.18425 1.31652 1.79107, 0.221067 1.04658 2.24416, 
+            0.235349 0.950618 2.39064, 0.627577 0.938052 2.34039, 0.518207 1.30298 1.756, -0.754247 1.02964 2.13807, 
+            -0.779241 0.92757 2.26762, -0.553941 1.19155 1.96178, -0.597159 1.04338 2.18605, -0.327794 1.31211 1.78076, 
+            -0.200781 1.20982 1.99455, -0.414284 1.04831 2.22158, -0.430762 0.949664 2.36933, -0.237836 0.858135 2.52803, 
+            -0.649479 1.29487 1.73021, -0.66892 1.2611 1.79732, 0 0.950816 2.39665, 0 1.04566 2.25633, 
+            -0.715947 1.15063 1.97358, -0.375959 1.20602 1.97744, -0.18425 1.31652 1.79107, -0.221067 1.04658 2.24416, 
+            -0.235349 0.950618 2.39064, -0.627577 0.938052 2.34039, -0.518207 1.30298 1.756, 0 1.31869 1.79597, 
+            0 1.21122 2.00024, 0 0.858012 2.53567
+          ]
+        }
+        coordIndex [
+          21,20,19,-1, 15,19,18,-1, 12,15,14,-1, 14,16,30,-1, 23,30,22,-1, 8,29,11,-1, 
+          10,29,7,-1, 5,29,6,-1, 6,29,13,-1, 13,29,12,-1, 12,29,15,-1, 29,19,15,-1, 
+          9,19,29,-1, 9,21,19,-1, 19,20,28,-1, 18,28,27,-1, 19,28,18,-1, 15,18,25,-1, 
+          18,17,25,-1, 27,17,18,-1, 25,17,26,-1, 16,25,26,-1, 14,25,16,-1, 15,25,14,-1, 
+          12,14,24,-1, 23,14,30,-1, 24,14,23,-1, 20,53,42,-1, 20,42,28,-1, 27,43,52,-1, 
+          27,42,43,-1, 28,42,27,-1, 27,52,17,-1, 17,52,51,-1, 17,51,26,-1, 8,9,29,-1, 
+          10,11,29,-1, 0,38,39,-1, 34,37,38,-1, 31,33,34,-1, 33,50,35,-1, 41,40,50,-1, 
+          4,3,49,-1, 3,2,49,-1, 49,2,1,-1, 1,32,49,-1, 32,31,49,-1, 31,34,49,-1, 
+          49,34,38,-1, 4,49,38,-1, 4,38,0,-1, 38,48,39,-1, 37,47,48,-1, 38,37,48,-1, 
+          34,45,37,-1, 37,45,36,-1, 47,37,36,-1, 45,46,36,-1, 35,46,45,-1, 33,35,45,-1, 
+          34,33,45,-1, 31,44,33,-1, 41,50,33,-1, 44,41,33,-1, 39,42,53,-1, 39,48,42,-1, 
+          47,52,43,-1, 47,43,42,-1, 48,47,42,-1, 47,36,52,-1, 36,51,52,-1, 36,46,51,-1, 
+          5,7,29,-1
+        ]
+      }
+    }
+  ]
+  }
+  ]
+}
+     
+     
+     
+
+
+      
+      %< if (fields.rightWingMirror.value) { >%
+          DEF RIGHT_WING_DISPLAY Display {
+            children [
+      %< } >%
+      Transform{
+        rotation 0.57735 0.57735 0.57735 2.094395
+        children [
+          BmwX5RightWingMirror {
+          }
+        ]
+      }
+      %< if (fields.rightWingMirror.value) { >%
+            ]
+            name "right_wing_display"
+            width 512
+            height 256
+          }
+      %< } >%
+      %< if (fields.leftWingMirror.value) { >%
+          DEF LEFT_WING_DISPLAY Display {
+            children [
+      %< } >%
+      Transform{
+      rotation 0.57735 0.57735 0.57735 2.094395
+        children [
+          BmwX5LeftWingMirror {
+          }
+        ]
+      }
+      %< if (fields.leftWingMirror.value) { >%
+            ]
+            name "left_wing_display"
+            width 512
+            height 256
+          }
+      %< } >%
+      # vehicle interior
+      %< if (interior) { >%
+              Transform{
+                rotation 0.57735 0.57735 0.57735 2.094395
+                children [
+                  BmwX5Interior {
+                    %< if (dynamicSpeedDisplay) { >%
+                      baseColorMap "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/textures/bmw_interior_speedometer_without_needles.jpg"
+                    %< } else { >%
+                      baseColorMap "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/bmw/textures/bmw_interior_speedometer.jpg"
+                    %< } >%
+                    indicatorLevers IS indicatorLevers
+                  }
+                ]
+              }
+              DEF REAR_MIRROR Hinge2Joint {
+                jointParameters HingeJointParameters {
+                  axis 0 0 1
+                  anchor 1.757 -0.03 1.195
+                }
+                jointParameters2 JointParameters {
+                  axis 0 1 0
+                }
+                device [
+                  DEF REAR_YAW_MOTOR RotationalMotor {
+                    name "rear_yaw_mirror_frame_motor"
+                    maxPosition 0.2
+                    minPosition -0.2
+                    sound ""
+                  }
+                ]
+                device2 [
+                  DEF REAR_PITCH_MOTOR RotationalMotor {
+                    name "rear_pitch_mirror_frame_motor"
+                    maxPosition 0.2
+                    minPosition -0.2
+                    sound ""
+                  }
+                ]
+                endPoint Solid {
+                  children [
+                    Transform{
+                      rotation 0.57735 0.57735 0.57735 2.094395
+                      children [
+                        BmwX5CentralMirrorFrame {
+                        }
+                      ]
+                    }
+                    # When active, the parameter changes REAR_DISPLAY Shape to a display
+                    %< if (rearMirror) { >%
+                      DEF REAR_DISPLAY Display {
+                        children [
+                    %< } >%
+                    Transform{
+                      rotation 0.57735 0.57735 0.57735 2.094395
+                      children [
+                        BmwX5CentralMirror {
+                        }
+                      ]
+                    }
+                    %< if (rearMirror) { >%
+                        ]
+                        name "rear_display"
+                        width 256
+                        height 80
+                      }
+                    %< } >%
+                  ]
+                  name "central mirror"
+                }
+              }
+              %< if (completeInterior) { >%
+                Transform{
+                    rotation 0.57735 0.57735 0.57735 2.094395
+                    children [
+                      BmwX5RearInterior {
+                        shifter IS shifter
+                      }
+                    ]
+                  }
+              %< } >%
+              Transform {
+                translation 2.03 0.43 0.61
+                rotation 0.57735 0.57735 0.57735 2.094395
+                children [
+                  Slot {
+                    type "vehicle steering wheel"
+                    endPoint IS steeringWheel
+                  }
+                ]
+              }
+              %< if (dynamicSpeedDisplay) { >%
+                  DEF SPEED_NEEDLE HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis 0.055 0 -0.049
+                      anchor 2.16 0.5135 0.7308
+                    }
+                    device [
+                      RotationalMotor {
+                        name "speed_needle_motor"
+                        maxPosition 4.42
+                        minPosition 0
+                        sound ""
+                      }
+                    ]
+                    endPoint Solid {
+                      children [
+                        DEF LEFT_NEEDLE Shape {
+                          appearance DEF NEEDLE_APPEARANCE PBRAppearance {
+                              metalness 0
+                              roughness 1
+                              baseColor 1 0.564706 0.0313725
+                              emissiveColor 0.337255 0.180392 0.00784314
+                          }
+                          geometry IndexedFaceSet {
+                            coord Coordinate {
+                              point [
+                                2.166991 0.516675 0.719537 2.168242 0.518099 0.721015 2.150175 0.551327 0.70148 2.150081 0.552352 0.701407 2.15071 0.551936 0.702112 2.150507 0.552172 0.701888 2.150215 0.552397 0.701561 2.150017 0.552171 0.701327 2.15008 0.551686 0.701383
+                              ]
+                            }
+                            coordIndex [
+                              5, 2, 4, -1, 1, 4, 0, -1, 5, 6
+                              8, -1, 3, 7, 6, -1, 8, 2, 5, -1
+                              0, 4, 2, -1, 6, 7, 8, -1
+                            ]
+                          }
+                        }
+                      ]
+                      name "speed needle"
+                    }
+                  }
+                  DEF RPM_NEEDLE HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis 0.055 0 -0.049
+                      anchor 2.16 0.3389 0.7319
+                    }
+                    device [
+                      RotationalMotor {
+                        name "rpm_needle_motor"
+                        maxPosition 4.42
+                        minPosition 0
+                        sound ""
+                      }
+                    ]
+                    endPoint Solid {
+                      children [
+                        DEF RIGHT_NEEDLE Shape {
+                          appearance USE NEEDLE_APPEARANCE
+                          geometry IndexedFaceSet {
+                            coord Coordinate {
+                              point [
+                                2.167793 0.341341 0.720529 2.169029 0.342776 0.722008 2.150643 0.375846 0.702505 2.150539 0.376871 0.702432 2.151172 0.37646 0.703137 2.150967 0.376694 0.702913 2.150672 0.376916 0.702587 2.150476 0.376689 0.702352 2.150545 0.376204 0.702408
+                              ]
+                            }
+                            coordIndex [
+                              5, 2, 4, -1, 1, 4, 0, -1, 5, 6
+                              7, -1, 3, 7, 6, -1, 8, 2, 5, -1
+                              0, 4, 2, -1, 5, 7, 8, -1
+                            ]
+                          }
+                        }
+                      ]
+                      name "rpm needle"
+                    }
+                  }
+              %< } >%
+      %< } >%
+      # mirror cameras
+      %< if (fields.leftWingMirror.value) { >%
+          DEF LEFT_WING_MIRROR Hinge2Joint {
+            jointParameters HingeJointParameters {
+              axis 0 0 0.3
+              anchor 2.08 1 0.9
+            }
+            jointParameters2 JointParameters {
+              axis 0.061 0.3 0
+            }
+            device [
+              DEF LEFT_YAW_MOTOR RotationalMotor {
+                name "left_wing_yaw_mirror_motor"
+                maxPosition 0.2
+                minPosition -0.2
+                sound ""
+              }
+            ]
+            device2 [
+              DEF LEFT_PITCH_MOTOR RotationalMotor {
+                name "left_wing_pitch_mirror_motor"
+                maxPosition 0.2
+                minPosition -0.2
+                sound ""
+              }
+            ]
+            endPoint DEF LEFT_WING_CAMERA Camera {
+              translation 2.08 1 0.9
+              rotation 0 0 1 3
+              fieldOfView 0.5236
+              name "left_wing_camera"
+              width 512
+              height 256
+              far %<= fields.mirrorFar.value >%
+            }
+          }
+      %< } >%
+      %< if (fields.rightWingMirror.value) { >%
+          DEF RIGHT_WING_MIRROR Hinge2Joint {
+            jointParameters HingeJointParameters {
+              axis 0 0 0.3
+              anchor 2.08 -1 0.9
+            }
+            jointParameters2 JointParameters {
+              axis -0.061 0.3 0
+            }
+            device [
+              DEF RIGHT_YAW_MOTOR RotationalMotor {
+                name "right_wing_yaw_mirror_motor"
+                maxPosition 0.2
+                minPosition -0.2
+                sound ""
+              }
+            ]
+            device2 [
+              DEF RIGHT_PITCH_MOTOR RotationalMotor {
+                name "right_wing_pitch_mirror_motor"
+                maxPosition 0.2
+                minPosition -0.2
+                sound ""
+              }
+            ]
+            endPoint DEF RIGHT_WING_CAMERA Camera {
+              translation 2.08 -1 0.9
+              rotation 0 0 1 3.28
+              fieldOfView 0.5236
+              name "right_wing_camera"
+              width 512
+              height 256
+              far %<= fields.mirrorFar.value >%
+            }
+          }
+      %< } >%
+      %< if (rearMirror) { >%
+          DEF REAR_MIRROR Hinge2Joint {
+            jointParameters HingeJointParameters {
+              axis 0 0 0.3
+              anchor -0.7 0 1.3
+            }
+            jointParameters2 JointParameters {
+              axis 0 0.3 0
+            }
+            device [
+              DEF REAR_YAW_MOTOR RotationalMotor {
+                name "rear_yaw_mirror_motor"
+                maxPosition 0.2
+                minPosition -0.2
+                sound ""
+              }
+            ]
+            device2 [
+              DEF REAR_PITCH_MOTOR RotationalMotor {
+                name "rear_pitch_mirror_motor"
+                maxPosition 0.2
+                minPosition -0.2
+                sound ""
+              }
+            ]
+            endPoint DEF REAR_CAMERA Camera {
+              translation -0.7 0.8 1.3
+              rotation 0 0 1 3.14156
+              name "rear_camera"
+              width 256
+              height 80
+              far %<= fields.mirrorFar.value >%
+            }
+          }
+      %< } >%
+    ]
+    name IS name
+    model "BMW X5"
+    controller IS controller
+    controllerArgs IS controllerArgs
+    supervisor IS supervisor
+    synchronization IS synchronization
+    boundingObject Group {
+      children [
+        Transform {
+          translation 2.6775 0 0.29
+          rotation 0.57735 0.57735 0.57735 2.094395
+          children [
+            Box {
+              size 1.73 0.76 2
+            }
+          ]
+        }
+        Transform {
+          translation 0.5875 0 0.63
+          rotation 0.57735 0.57735 0.57735 2.094395
+          children [
+            Box {
+              size 1.73 1.44 2.14
+            }
+          ]
+        }
+        Transform {
+          translation -0.1725 0 0.53
+          rotation 0.57735 0.57735 0.57735 2.094395
+          children [
+            Box {
+              size 1.73 0.78 1.41
+            }
+          ]
+        }
+      ]
+    }
+    radarCrossSection 100
+    recognitionColors [
+      %<= fields.color.value.r >% %<= fields.color.value.g >% %<= fields.color.value.b >%
+    ]
+    physics Physics {
+      density -1
+      mass 2000
+      centerOfMass [
+        1.2975 0 0.1
+      ]
+      inertiaMatrix [
+        1125.07 4473.54 4346.1
+        0 846.89 0
+      ]
+    }
+    window IS window
+  }
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+
+   
+    <route id="1" edges="1036712900_1 1036712900_2 1036594352 1036594353 797777131_1"/>
+    <route id="1_2" edges="1036712900_1 1036712900_2 E0 797777130_2 797777130_3 505059835"/>
+    <route id="1_3" edges="1036712900_1 1036712900_2 E0 797777130_2 797777130_3 -791820678 -791820679 -419978143_7"/>
+    <route id="2_1" edges="802444124_4 802444124_5 802444124_3 1036594355 1036594354_1 E1 798001346"/>
+    <route id="2_2" edges="802444124_4 802444124_5 802444124_3 1036594355 1036594354_1 797777130_2 797777130_3 505059835"/>
+    <route id="3_1" edges="505059836 794235947_1 794235947_2 E2 1036712901_3 1036712901_4 1036712901_2"/>
+    <route id="3_2" edges="505059836 794235947_1 794235947_2 798001346"/>
+    <route id="4_1" edges="-794235948 794235947_1 794235947_2 E2 1036712901_3 1036712901_4 1036712901_2"/>  
+    <route id="5_1" edges="521567035_1 1036712901_3 1036712901_4 1036712901_2"/> 
+    <route id="5_2" edges="521567035_1 E3 1036594352 1036594353 797777131_1"/>
+
+    <vType id="car" minGap="5"/>
+    <vType id="bus" accel="0.8" decel="4.5" sigma="0.8" length="10" minGap="8" maxSpeed="20" guiShape="bus" vClass="bus"/>
+    <vType id="motorcycle" accel="1.2" decel="4.5" sigma="0.5" length="3" minGap="1.5" maxSpeed="25" guiShape="motorcycle" vClass="motorcycle"/>
+    <vType id="trailer" accel="0.8" decel="4.5" sigma="0.8" length="14" minGap="8" maxSpeed="20" guiShape="truck" vClass="trailer"/>
+    <vType id="truck" accel="0.8" decel="4.5" sigma="0.5" length="8" minGap="8" maxSpeed="25" guiShape="truck" vClass="truck"/>
+    
+    
+    <vehicle id="0" type="car" route="1" depart="0" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="1" type="car" route="1" depart="2" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="2" type="car" route="1" depart="4" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="3" type="car" route="1" depart="6" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="4" type="car" route="1" depart="8" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="5" type="car" route="1" depart="10" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="6" type="car" route="1" depart="12" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="7" type="car" route="1" depart="14" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="8" type="car" route="1" depart="16" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="9" type="car" route="1" depart="18" departLane="free" departPos="0" departSpeed="max"/>
+    <vehicle id="10" type="car" route="1" depart="20" departLane="free" departPos="0" departSpeed="max"/>
+
+
+
+    <flow id="type1" begin="0" end="7200" vehsPerHour="3" type="bus" route="1_2"/>
+    <flow id="type2" begin="600" end="7200" vehsPerHour="3" type="bus" route="1_3"/>
+    <flow id="type3" begin="0" end="7200" vehsPerHour="3" type="bus" route="2_2"/>
+    <flow id="type4" begin="900" end="7200" vehsPerHour="3" type="bus" route="4_1"/>
+    <flow id="type5" begin="600" end="7200" vehsPerHour="3" type="bus" route="5_2"/>
+
+
+    <flow id="type6" color="1,1,0"  begin="0" end= "7200" vehsPerHour="150" type="car" route="2_1"/>
+    <flow id="type7" color="1,1,0"  begin="0" end= "7200" vehsPerHour="1000" type="car" route="3_1"/>
+    <flow id="type8" color="1,1,0"  begin="0" end= "7200" vehsPerHour="1000" type="car" route="3_2"/>
+    <flow id="type9" color="1,1,0"  begin="0" end= "7200" vehsPerHour="1000" type="car" route="5_1"/>
+    <flow id="type10" color="1,1,0"  begin="0" end= "7200" vehsPerHour="150" type="car" route="5_2"/>
+
+
+<flow id="type6" color="1,1,0"  begin="0" end= "7200" vehsPerHour="150" type="car" route="2_1"/>
+    <flow id="type7" color="1,1,0"  begin="0" end= "7200" vehsPerHour="7200" type="car" route="3_1"/>
+    <flow id="type8" color="1,1,0"  begin="0" end= "7200" vehsPerHour="7200" type="car" route="3_2"/>
+    <flow id="type9" color="1,1,0"  begin="0" end= "7200" vehsPerHour="7200" type="car" route="5_1"/>
+    <flow id="type10" color="1,1,0"  begin="0" end= "7200" vehsPerHour="100" type="car" route="5_2"/>
+
+
+
+	
+</routes>
+

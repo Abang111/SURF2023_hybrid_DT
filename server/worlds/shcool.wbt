@@ -1,0 +1,523 @@
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/Floor.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/Road.proto"
+IMPORTABLE EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/RoadLine.proto"
+EXTERNPROTO "../protos/BmwX5.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/bmw/BmwX5Simple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/citroen/CitroenCZeroSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/toyota/ToyotaPriusSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/lincoln/LincolnMKZSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/range_rover/RangeRoverSportSVRSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/tesla/TeslaModel3Simple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/mercedes_benz/MercedesBenzSprinterSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/generic/BusSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/generic/TruckSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/generic/TruckTrailerSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/generic/TruckTankSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/generic/ScooterSimple.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/generic/ScooterDriver.proto"
+IMPORTABLE EXTERNPROTO "webots://projects/vehicles/protos/generic/MotorbikeSimple.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/vehicles/protos/lincoln/LincolnMKZ.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/advertising_board/protos/AdvertisingBoard.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/default/protos/SumoInterface.proto"
+
+WorldInfo {
+  ERP 0.6
+  lineScale 1
+  contactProperties [
+    ContactProperties {
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+    }
+    ContactProperties {
+      material2 "CitroenCZeroWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+    }
+    ContactProperties {
+      material2 "ToyotaPriusWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+    }
+    ContactProperties {
+      material2 "LincolnMKZWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+    }
+    ContactProperties {
+      material2 "RangeRoverSportSVRWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+    }
+    ContactProperties {
+      material2 "TruckWheels"
+      coulombFriction [
+        8
+      ]
+      softCFM 1e-05
+    }
+  ]
+}
+Viewpoint {
+  orientation 0.06989480076252774 -0.8845005710474553 -0.46127373287787815 5.943814612861579
+  position -1236.9706215884535 -121.13438292108229 28.010789948195004
+  followType "Mounted Shot"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  translation -313 -200 -0.05
+  size 1850 512
+  appearance PBRAppearance {
+    baseColorMap ImageTexture {
+      url [
+        "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/default/worlds/textures/grass.jpg"
+      ]
+    }
+    roughness 1
+    metalness 0
+  }
+}
+AdvertisingBoard {
+  translation 366.925 -379.203 1.57
+  rotation 0 0 -1 -2.617985307179586
+  name "1600m"
+  frontTexture [
+    "../1600m.png"
+  ]
+}
+AdvertisingBoard {
+  translation 178.976 -310.504 1.57
+  rotation 0 0 -1 -2.617985307179586
+  name "1400m"
+  frontTexture [
+    "../1400m.png"
+  ]
+}
+AdvertisingBoard {
+  translation -8.09326 -242.244 1.57
+  rotation 0 0 -1 -2.617985307179586
+  name "1200m"
+  frontTexture [
+    "../1200m.png"
+  ]
+}
+AdvertisingBoard {
+  translation -201.701 -171.465 1.57
+  rotation 0 0 1 2.61799
+  name "1000m"
+  frontTexture [
+    "../1000m.png"
+  ]
+}
+AdvertisingBoard {
+  translation -390.161 -135.521 1.57
+  rotation 0 0 -1 -2.8797953071795863
+  name "800m"
+  frontTexture [
+    "../800m.png"
+  ]
+}
+AdvertisingBoard {
+  translation -589.864 -132.468 1.57
+  rotation 0 0 -1 -2.8797953071795863
+  name "600m"
+  frontTexture [
+    "../600m.png"
+  ]
+}
+AdvertisingBoard {
+  translation -789.3 -130.964 1.57
+  rotation 0 0 -1 -2.8797953071795863
+  name "400m"
+  frontTexture [
+    "../400m.png"
+  ]
+}
+AdvertisingBoard {
+  translation -968.212 -129.245 1.57
+  rotation 0 0 -1 -2.8797953071795863
+  name "200m"
+  frontTexture [
+    "../200m.png"
+  ]
+}
+AdvertisingBoard {
+  translation -885.703 -150.988 10.7
+  name "advertising board(1)"
+  displayWidth 20
+  displayHeight 20
+}
+Road {
+  translation -885.508 -120.183 7.10543e-15
+  name "Songtao_1"
+  id "Songtao_1"
+  endJunction "4208772196"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 27.777778
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    -300 5 0
+    0 0 0
+    65.731 -1.02935 0
+    468.293285 -6.458745 0
+  ]
+  startingAngle [
+    0
+  ]
+  endingAngle [
+    0
+  ]
+  splineSubdivision 16
+  locked FALSE
+}
+Road {
+  translation -417.557 -126.597 0
+  name "Songtao_2"
+  id "Songtao_2"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 27.777778
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    0 0 0
+    43.5652 -0.389236 0
+  ]
+  startingAngle [
+    0
+  ]
+  endingAngle [
+    0
+  ]
+  splineSubdivision 0
+  locked FALSE
+}
+Road {
+  translation -374.567 -127.1 3.6788e-21
+  name "Songtao_3_1"
+  id "Songtao_3_1"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 27.777778
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    0 0 0
+    26.1 -1.06 0
+  ]
+  startingAngle [
+    0
+  ]
+  endingAngle [
+    0
+  ]
+  endLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+  ]
+  splineSubdivision 16
+  locked FALSE
+}
+Road {
+  translation -349.247 -128.072 9.4304e-21
+  name "Songtao_3_2"
+  id "Songtao_3_2"
+  startJunction "4603624954"
+  endJunction "4208770881"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 27.777778
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    0 0 0
+    52 -6.14 0
+  ]
+  startingAngle [
+    0
+  ]
+  endingAngle [
+    0
+  ]
+  endLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+  ]
+  splineSubdivision 16
+  locked FALSE
+}
+Road {
+  translation -298.702 -134.247 -3.55271e-15
+  name "Songtao_3_3"
+  id "Songtao_3_3"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 27.777778
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    0 0 0
+    50.9 -11.5 0
+  ]
+  startingAngle [
+    0
+  ]
+  endingAngle [
+    0
+  ]
+  endLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+  ]
+  splineSubdivision 16
+  locked FALSE
+}
+Road {
+  translation -249.58 -145.042 -1.09779e-12
+  name "Songtao_3_4"
+  id "Songtao_3_4"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 27.777778
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    0 0 0
+    273 -99.3 0
+  ]
+  startingAngle [
+    0
+  ]
+  endingAngle [
+    0
+  ]
+  endLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+  ]
+  splineSubdivision 16
+  locked FALSE
+}
+Road {
+  translation 20.9941 -243.42 0
+  name "Songtao_4"
+  id "Songtao_4"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 27.777778
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    0 0 0
+    184.848 -67.4639 0
+    410 -150 0
+  ]
+  startingAngle [
+    0
+  ]
+  endingAngle [
+    0
+  ]
+  startLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_dashed.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_dashed.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_dashed.png"
+  ]
+  endLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+  ]
+  splineSubdivision 16
+  locked FALSE
+}
+Road {
+  translation 210.352 -298.8 0.01
+  rotation 0 0 -1 0.49
+  name "Songtao_counter"
+  id "Songtao_counter"
+  width 10.5
+  numberOfLanes 3
+  numberOfForwardLanes 3
+  speedLimit 40
+  lines [
+    RoadLine {
+    }
+    RoadLine {
+    }
+  ]
+  wayPoints [
+    320 48 0
+    0 0 0
+    -485.3 -68 0
+    -559 -91 0
+    -590 -105 0
+    -800 -215 0
+    -1050 -340 0
+    -1320 -480 0
+  ]
+  startingAngle [
+    -3.498636
+  ]
+  endingAngle [
+    -3.498636
+  ]
+  startLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_dashed.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_dashed.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_dashed.png"
+  ]
+  endLine [
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+    "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/road/protos/textures/road_line_triangle.png"
+  ]
+  splineSubdivision 0
+  locked FALSE
+}
+DEF WEBOTS_VEHICLE0 BmwX5 {
+  hidden position_0_0 7.629515678084965e-06
+  hidden position2_0_0 0.03003986139233283
+  hidden position_0_1 7.629499140303777e-06
+  hidden position2_0_1 0.026768846715986505
+  hidden position_0_2 0.02035910726735097
+  hidden position_0_3 0.003256372057449414
+  hidden position_0_8 7.629510948348184e-05
+  hidden position_0_9 6.172508383896214e-07
+  hidden position_0_10 5.472286691648553e-07
+  hidden rotation_1 -0.9999999677447261 3.814757716014929e-06 -0.00025396061547956224 0.03003986236112929
+  hidden rotation_2 0.9999999593810545 -3.814749415219288e-06 -0.00028499708321548886 0.026768847803173585
+  hidden rotation_3 -1 0 0 0.020359107267350005
+  hidden rotation_4 1 0 0 0.003256372057403929
+  hidden rotation_33 0 -0.3205961743168832 0.9472159695726093 7.629510946146276e-05
+  hidden translation_34 -2.907766338822171e-08 1.6876292230350032e-07 -3.263819392529399e-08
+  hidden rotation_34 0.7466598432279096 0 -0.6652060421485012 8.429369702178807e-08
+  hidden translation_35 -4.1142333984112156e-10 3.619554322931151e-09 -4.6180170798493236e-10
+  hidden translation_38 -1.8176472416087108e-07 1.0549394477976648e-06 -2.0402162992372297e-07
+  hidden rotation_38 0.7466598432279095 5.9206329664438786e-24 -0.6652060421485011 5.331201499700061e-07
+  hidden translation_39 -1.2295469575818174e-07 1.0817130099982641e-06 -1.3801037357374923e-07
+  hidden rotation_39 0.7466598432279095 0 -0.6652060421485012 5.470979139413201e-07
+  translation -1123.549701730555 -102.28696833695231 0.2636999966342334
+  rotation 0.0023652727291641434 -0.04600204213258074 0.9989385454594035 0.1028537032452463
+  name "HUD"
+  controller "Webots_HUD"
+  supervisor TRUE
+}
+LincolnMKZ {
+  hidden position_0_0 -3.1756531384000075e-11
+  hidden position2_0_0 1.952116302416865e-07
+  hidden position_0_1 3.175774095340151e-11
+  hidden position2_0_1 1.9521161353239635e-07
+  hidden position_0_2 1.3174807905421404e-07
+  hidden position_0_3 1.3174807956692176e-07
+  hidden rotation_1 -0.9999999867680228 -1.587826548189919e-11 0.00016267745382015066 1.954268969387413e-07
+  hidden rotation_2 0.9999999867670126 -1.5878870266575863e-11 -0.00016268366394031812 1.954268969387413e-07
+  hidden rotation_3 -1 0 0 1.3328003749250115e-07
+  hidden rotation_4 1 0 0 1.3328003749250115e-07
+  translation 4.73094868826316 -3.135243743586847e-05 0.26049354842244143
+  rotation 2.7717576336068074e-06 0.999998423495307 -0.0017756686678757447 0.003116913537109177
+  name "surf_supervisor"
+  controller "all_SUMO_translation"
+  supervisor TRUE
+}
+AdvertisingBoard {
+  translation 208.508 -330.944 9.62
+  rotation 0 0 1 -0.523595307179586
+  displayWidth 20
+  displayHeight 20
+}
+SumoInterface {
+}
+DEF SUMO_VEHICLE0 BmwX5Simple {
+  translation -1122.4850013934429 -116.73506582950165 0.4
+  rotation 0 0 1 0.10375407985631697
+  color 0 1 0
+  name "SUMO vehicle 0"
+}
+DEF WEBOTS_VEHICLE2 BmwX5 {
+  hidden position_0_0 4.8423373654399455e-05
+  hidden position2_0_0 434.662068334517
+  hidden position_0_1 5.0564230951769853e-05
+  hidden position2_0_1 434.70307592151124
+  hidden position_0_2 433.914673223018
+  hidden position_0_3 433.91763384607754
+  hidden position_0_8 -1.7401887640964425e-05
+  hidden position_0_9 2.3217545958758024e-07
+  hidden rotation_1 0.9999999989649825 -2.4211686806871214e-05 3.852050282308902e-05 5.160903167121391
+  hidden rotation_2 -0.9999999989411827 2.5282115454502434e-05 3.845060587788904e-05 5.119895580087698
+  hidden rotation_3 1 0 0 5.908298279553068
+  hidden rotation_4 -1 0 0 5.905337656493518
+  hidden rotation_33 0 0.3205961743168832 -0.9472159695726096 1.7401876921099285e-05
+  hidden translation_34 -0.009579753229846943 0.9677841099627027 -0.010752784237583302
+  hidden rotation_34 0.7466598432279095 0 -0.6652060421485011 0.4771330816162727
+  hidden translation_38 0.30415360028067373 -0.8530834240964432 0.34139689827422554
+  hidden rotation_38 -0.7466598432279096 0 0.6652060421485011 0.4771328494408127
+  translation -1173.4881077562247 -101.7330165605498 0.26383325222222087
+  rotation -0.002111899755022642 -0.4533692169776461 -0.891320308854511 0.010439054896599501
+  color 0 1 1
+  name "PID2"
+  controller "PID_with_back"
+  supervisor TRUE
+}
+DEF SUMO_VEHICLE1 Solid {
+  translation -1019.5589350948725 -118.1449878219278 0.358
+  rotation 0 0 -1 0.016695223711124457
+  name "1"
+}
