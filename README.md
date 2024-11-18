@@ -48,7 +48,7 @@ If you want to test the test-scenario by yourself, you should do the following s
 
 **Notice:** both server-side and client-side should be involved in the same LAN. Make sure you can ping each other.
 
-### 7.1 Daownload drive program or Logitech client 
+### 7.1 Download drive program or Logitech client 
 Download drive program or Logitech client from [Logitech official website](https://www.logitechg.com/en-us/innovation/g-hub.html) and plug in the hardwares to computers. Since we have updated the previous steering wheel controlling logic from C++ to Python, after downloading the driver, in the software, it is a plug-and-play process.
 
 ### 7.2 Adjust the Ip address in `SumoSupervisor.py`
